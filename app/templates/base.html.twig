@@ -1,24 +1,59 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Enchères Secrètes{% endblock %}</title>
+    <link rel="stylesheet" href="https://bootswatch.com/5/slate/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
+</head>
+<body>
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="{{ path('app_home') }}">🔒 Enchères Secrètes</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
 
-        {% set frankenphpHotReload = app.request.server.get('FRANKENPHP_HOT_RELOAD') %}
-        {% if frankenphpHotReload %}
-        <meta name="frankenphp-hot-reload:url" content="{{ frankenphpHotReload }}">
-        <script src="https://cdn.jsdelivr.net/npm/idiomorph"></script>
-        <script src="https://cdn.jsdelivr.net/npm/frankenphp-hot-reload/+esm" type="module"></script>
-        {% endif %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_home') }}">Objets</a>
+                </li>
+
+                {% if app.user %}
+                    <li class="nav-item">
+                        <span class="nav-link text-light">👤 {{ app.user.email }}</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Déconnexion</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Connexion</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">S'inscrire</a>
+                    </li>
+                {% endif %}
+            </ul>
+            <form class="d-flex ms-3" method="GET" action="{{ path('app_home') }}">
+                <input class="form-control me-2" type="search" name="search" placeholder="Rechercher un objet..." value="{{ app.request.query.get('search') }}">
+                <button class="btn btn-outline-light" type="submit">🔍</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<main class="container my-4">
+    {% block body %}{% endblock %}
+</main>
+
+<footer class="bg-dark text-center text-light py-3 mt-5">
+    <p class="mb-0">© 2025 Enchères Secrètes</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ item.title }}{% endblock %}
+
+{% block body %}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8">
+        <a href="{{ path('app_home') }}" class="btn btn-outline-light mb-3">← Retour</a>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>{{ item.title }}</h2>
+            </div>
+            <div class="card-body">
+                <p>{{ item.description }}</p>
+
+                <p>
+                    <strong>Prix de départ :</strong> {{ item.startingPrice }} €
+                </p>
+
+                <p>
+                    <strong>Statut :</strong>
+                    <span class="badge {{ item.status == 'published' ? 'bg-success' : 'bg-secondary' }}">
+                        {{ item.status == 'published' ? 'En cours' : 'Clôturé' }}
+                    </span>
+                </p>
+
+                <p>
+                    <strong>Catégories :</strong>
+                    {% for category in item.categories %}
+                        <span class="badge bg-info">{{ category.name }}</span>
+                    {% endfor %}
+                </p>
+
+                {% if item.status == 'closed' and item.winner %}
+                    <div class="alert alert-success">
+                        🏆 <strong>Gagnant :</strong> {{ item.winner.email }}
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
