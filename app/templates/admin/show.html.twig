@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin — {{ item.title }}{% endblock %}
+
+{% block body %}
+<a href="{{ path('app_admin') }}" class="btn btn-outline-light mb-3">← Retour</a>
+
+<div class="card mb-4">
+    <div class="card-header text-center">
+        <h2>{{ item.title }}</h2>
+    </div>
+    <div class="card-body text-center">
+        <p>{{ item.description }}</p>
+        <p><strong>Prix de départ :</strong> {{ item.startingPrice }} €</p>
+        <p>
+            <strong>Statut :</strong>
+            <span class="badge {{ item.status == 'published' ? 'bg-success' : (item.status == 'closed' ? 'bg-secondary' : 'bg-warning') }}">
+                {{ item.status == 'published' ? 'En cours' : (item.status == 'closed' ? 'Clôturé' : 'Non publié') }}
+            </span>
+        </p>
+
+        {% if item.status == 'closed' %}
+            <p><strong>Prix final :</strong> {{ item.finalPrice }} €</p>
+            <div class="alert alert-success">
+                🏆 <strong>Gagnant :</strong> {{ item.winner.email }}
+            </div>
+        {% endif %}
+
+        {# Bouton toggle unpublished <-> published #}
+        {% if item.status != 'closed' %}
+            <a href="{{ path('app_admin_toggle', {id: item.id}) }}" class="btn btn-warning me-2">
+                {{ item.status == 'published' ? '🔒 Dépublier' : '🔓 Publier' }}
+            </a>
+        {% endif %}
+
+        {# Bouton clôturer #}
+        {% if item.status == 'published' and offers|length > 0 %}
+            <a href="{{ path('app_admin_close', {id: item.id}) }}" class="btn btn-danger">
+                🔨 Clôturer l'enchère
+            </a>
+        {% endif %}
+    </div>
+</div>
+
+{# Liste des enchérisseurs #}
+{% if offers|length > 0 %}
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">📋 Liste des enchères</h5>
+    </div>
+    <div class="card-body">
+        <table class="table table-dark table-hover">
+            <thead>
+                <tr>
+                    <th>Utilisateur</th>
+                    <th>Offre</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for offer in offers %}
+                    <tr>
+                        <td>{{ offer.user.email }}</td>
+                        <td>{{ offer.amount }} €</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+    <p class="text-muted">Aucune enchère pour cet objet.</p>
+{% endif %}
+
+{% endblock %}

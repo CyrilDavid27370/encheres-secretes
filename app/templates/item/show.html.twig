@@ -42,7 +42,8 @@
                     <hr>
                     {% if form %}
                         <h5>💰 Placer une enchère</h5>
-                        {{ form_start(form) }}
+                        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                        {{ form_errors(form) }}
                             <div class="mb-3">
                                 {{ form_label(form.amount) }}
                                 {{ form_widget(form.amount) }}

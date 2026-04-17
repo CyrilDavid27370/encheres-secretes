@@ -40,6 +40,12 @@ class Items
     #[ORM\OneToMany(targetEntity: Offer::class, mappedBy: 'item')]
     private Collection $offers;
 
+    #[ORM\ManyToOne]
+    private ?User $winner = null;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
+    private ?string $finalPrice = null;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
@@ -149,6 +155,30 @@ class Items
                 $offer->setItem(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getWinner(): ?User
+    {
+        return $this->winner;
+    }
+
+    public function setWinner(?User $winner): static
+    {
+        $this->winner = $winner;
+
+        return $this;
+    }
+
+    public function getFinalPrice(): ?string
+    {
+        return $this->finalPrice;
+    }
+
+    public function setFinalPrice(?string $finalPrice): static
+    {
+        $this->finalPrice = $finalPrice;
 
         return $this;
     }

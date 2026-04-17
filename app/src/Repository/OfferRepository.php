@@ -27,4 +27,26 @@ class OfferRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
     }
+
+    public function findByItem(int $itemId): array
+    {
+        return $this->createQueryBuilder('o')
+            ->where('o.item = :itemId')
+            ->setParameter('itemId', $itemId)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findBestOferForItem(int $itemId): ?Offer
+    {
+        return $this->createQueryBuilder('o')
+            ->where('o.item = :itemId')
+            ->setParameter('itemId', $itemId)
+            ->orderBy('o.amount', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

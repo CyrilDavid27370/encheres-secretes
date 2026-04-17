@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration{% endblock %}
+
+{% block body %}
+<h1 class="mb-4">⚙️ Administration — Liste des objets</h1>
+
+<table class="table table-dark table-hover">
+    <thead>
+        <tr>
+            <th>Titre</th>
+            <th>Prix de départ</th>
+            <th>Statut</th>
+            <th>Nombre d'enchères</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in items %}
+            {% set item = row[0] %}
+            {% set offerCount = row['offerCount'] %}
+            <tr>
+                <td>{{ item.title }}</td>
+                <td>{{ item.startingPrice }} €</td>
+                <td>
+                    <span class="badge {{ item.status == 'published' ? 'bg-success' : (item.status == 'closed' ? 'bg-secondary' : 'bg-warning') }}">
+                        {{ item.status == 'published' ? 'En cours' : (item.status == 'closed' ? 'Clôturé' : 'Non publié') }}
+                    </span>
+                </td>
+                <td>{{ item.status == 'published' ? offerCount : '-' }}</td>
+                <td>
+                    <a href="{{ path('app_admin_item_show', {id: item.id}) }}" class="btn btn-sm btn-primary">Voir</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -36,4 +36,26 @@ class ItemsRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findAllWithOfferCount(): array
+    {
+        return $this->createQueryBuilder('i')
+            ->leftJoin('i.offers', 'o')
+            ->addSelect('COUNT(o.id) AS offerCount')
+            ->groupBy('i.id')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findBySearch(string $search) : array
+    {
+        return $this->createQueryBuilder('i')
+            ->where('i.title LIKE :search')
+            ->orWhere('i.description LIKE :search')
+            ->andWhere('i.status IN (:statuses)')
+            ->setParameter('search', '%' . $search . '%')
+            ->setParameter('statuses', ['published', 'closed'])
+            ->getQuery()
+            ->getResult();
+    }
 }

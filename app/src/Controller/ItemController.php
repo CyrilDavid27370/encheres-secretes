@@ -19,10 +19,13 @@ final class ItemController extends AbstractController
     public function index(Request $request, ItemsRepository $itemsRepository,CategoryRepository $categoryRepository): Response
     {
         $categoryId = $request->query->get('category');
+        $search = $request->query->get('search');
         $categories = $categoryRepository->findAll();
 
-        if ($categoryId) {
-            $items = $itemsRepository ->findByCategory($categoryId);
+        if ($search) {
+            $items = $itemsRepository ->findBySearch($search);
+        } elseif ($categoryId) {
+            $items = $itemsRepository->findByCategory($categoryId);
         } else {
             $items = $itemsRepository->findPublished();
         }
@@ -70,9 +73,9 @@ final class ItemController extends AbstractController
         }
     }
 
-    return $this->render('item/show.html.twig', [
-        'item' => $item,
-        'form' => $form?->createView(),
+                return $this->render('item/show.html.twig', [
+                'item' => $item,
+                'form' => $form?->createView(),
     ]);
 }
 }

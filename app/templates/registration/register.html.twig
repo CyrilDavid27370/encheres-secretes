@@ -10,22 +10,23 @@
                 <h4 class="mb-0">📝 Créer un compte</h4>
             </div>
             <div class="card-body">
-                {{ form_errors(registrationForm) }}
-
-                {{ form_start(registrationForm) }}
+                {{ form_start(registrationForm, {'attr': {'novalidate': 'novalidate'}}) }}
+                    {{ form_errors(registrationForm) }}
                     <div class="mb-3">
                         {{ form_label(registrationForm.email, 'Email', {'label_attr': {'class': 'form-label'}}) }}
                         {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(registrationForm.email) }}
                     </div>
                     <div class="mb-3">
                         {{ form_label(registrationForm.plainPassword, 'Mot de passe', {'label_attr': {'class': 'form-label'}}) }}
                         {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(registrationForm.plainPassword) }}
                     </div>
                     <div class="mb-3">
                         {{ form_widget(registrationForm.agreeTerms) }}
                         {{ form_label(registrationForm.agreeTerms, "J'accepte les conditions") }}
+                        {{ form_errors(registrationForm.agreeTerms) }}
                     </div>
-
                     <button type="submit" class="btn btn-primary w-100">S'inscrire</button>
                 {{ form_end(registrationForm) }}
 
