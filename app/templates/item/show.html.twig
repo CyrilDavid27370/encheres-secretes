@@ -38,7 +38,27 @@
                         🏆 <strong>Gagnant :</strong> {{ item.winner.email }}
                     </div>
                 {% endif %}
-
+            {% if app.user and item.status == 'published' %}
+                    <hr>
+                    {% if form %}
+                        <h5>💰 Placer une enchère</h5>
+                        {{ form_start(form) }}
+                            <div class="mb-3">
+                                {{ form_label(form.amount) }}
+                                {{ form_widget(form.amount) }}
+                                {{ form_errors(form.amount) }}
+                            </div>
+                            <button type="submit" class="btn btn-success w-100">Confirmer mon enchère</button>
+                        {{ form_end(form) }}
+                    {% else %}
+                        <div class="alert alert-info">Vous avez déjà placé une enchère sur cet objet.</div>
+                    {% endif %}
+                {% elseif not app.user %}
+                    <hr>
+                    <p class="text-muted">
+                        <a href="{{ path('app_login') }}">Connectez-vous</a> pour placer une enchère.
+                    </p>
+                {% endif %}
             </div>
         </div>
     </div>

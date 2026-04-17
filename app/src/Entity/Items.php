@@ -34,9 +34,16 @@ class Items
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'items')]
     private Collection $categories;
 
+    /**
+     * @var Collection<int, Offer>
+     */
+    #[ORM\OneToMany(targetEntity: Offer::class, mappedBy: 'item')]
+    private Collection $offers;
+
     public function __construct()
     {
         $this->categories = new ArrayCollection();
+        $this->offers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -112,6 +119,36 @@ class Items
     public function removeCategory(Category $category): static
     {
         $this->categories->removeElement($category);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Offer>
+     */
+    public function getOffers(): Collection
+    {
+        return $this->offers;
+    }
+
+    public function addOffer(Offer $offer): static
+    {
+        if (!$this->offers->contains($offer)) {
+            $this->offers->add($offer);
+            $offer->setItem($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOffer(Offer $offer): static
+    {
+        if ($this->offers->removeElement($offer)) {
+            // set the owning side to null (unless already changed)
+            if ($offer->getItem() === $this) {
+                $offer->setItem(null);
+            }
+        }
 
         return $this;
     }
