@@ -58,4 +58,20 @@ class ItemsRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function save(Items $item, bool $flush = true): void
+    {
+        $this->getEntityManager()->persist($item);
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function remove(Items $item, bool $flush = true):void
+    {
+        $this->getEntityManager()->remove($item);
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
 }

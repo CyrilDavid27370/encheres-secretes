@@ -2,10 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Items;
+use App\Form\ItemFormType;
 use App\Repository\ItemsRepository;
 use App\Repository\OfferRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -88,5 +91,50 @@ class AdminController extends AbstractController
 
         $this->addFlash('success', 'Enchère clôturée ! Gagnant : ' . $bestOffer->getUser()->getEmail());
         return $this->redirectToRoute('app_admin_item_show', ['id' => $id]);
+    }
+
+    #[Route('/admin/form/{id}', name: 'app_admin_item_form', defaults: ['id' => null])]
+    public function form(?int $id, Request $request, ItemsRepository $itemsRepository): Response
+    {
+        if ($id) {
+            $item = $itemsRepository->find($id);
+
+            if (!$item) {
+                throw $this->createNotFoundException('Objet introuvable');
+            }
+            $title = "Modifier un objet";
+        } else {
+            $item = new Items();
+            $title = "Ajouter un objet";
+        }
+
+        $form = $this->createForm(ItemFormType::class, $item);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $itemsRepository->save($item);
+            $this->addFlash('success', $id ? 'Objet modifié avec succès !' : 'Objet crée avec succès !');
+            return $this->redirectToRoute('app_admin');
+        }
+
+        return $this->render('admin/form.html.twig', [
+            'form' => $form,
+            'item' => $item,
+            'title' => $title,
+        ]);
+    }
+
+    #[Route('/admin/item/{id}/delete', name: 'app_admin_item_delete')]
+    public function delete(int $id, ItemsRepository $itemsRepository): Response
+    {
+        $item = $itemsRepository->find($id);
+
+        if (!$item) {
+            throw $this->createNotFoundException('Objet introuvable');
+        }
+
+        $itemsRepository->remove($item);
+        $this->addFlash('success', 'Objet supprimé avec succès !');
+        return $this->redirectToRoute('app_admin');
     }
 }

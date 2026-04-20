@@ -39,6 +39,12 @@
                 🔨 Clôturer l'enchère
             </a>
         {% endif %}
+
+        {# Boutons CRUD #}
+        {% if item.status != 'closed'%}
+            <a href="{{ path('app_admin_item_form', {id: item.id}) }}" class="btn btn-warning me-2">✏️ Modifier</a>
+        {% endif %}
+            <a href="{{ path('app_admin_item_delete', {id: item.id}) }}" class="btn btn-danger" onclick="return confirm('Supprimer cet objet ?')">🗑️ Supprimer</a>
     </div>
 </div>
 
