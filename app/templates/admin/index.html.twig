@@ -34,7 +34,10 @@
                 <td>
                     <a href="{{ path('app_admin_item_show', {id: item.id}) }}" class="btn btn-sm btn-primary">Voir</a>
                     <a href="{{ path('app_admin_item_form', {id: item.id}) }}" class="btn btn-sm btn-warning">Modifier</a>
-                    <a href="{{ path('app_admin_item_delete', {id: item.id}) }}" class="btn btn-sm btn-danger" onclick="return confirm('Supprimer cet objet ?')">Supprimer</a>
+                    <form method="post" action="{{ path('app_admin_item_delete', {id: item.id}) }}" onsubmit="return confirm('Supprimer cet objet ?')">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ item.id) }}">
+                        <button type="submit" class="btn btn-sm btn-danger">🗑️ Supprimer</button>
+                    </form>
                 </td>
             </tr>
         {% endfor %}

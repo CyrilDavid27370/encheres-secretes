@@ -35,17 +35,21 @@
 
         {# Bouton clôturer #}
         {% if item.status == 'published' and offers|length > 0 %}
-            <a href="{{ path('app_admin_close', {id: item.id}) }}" class="btn btn-danger">
-                🔨 Clôturer l'enchère
-            </a>
+            <form method="post" action="{{ path('app_admin_close', {id: item.id}) }}" class="d-inline">
+                <input type="hidden" name="_token" value="{{ csrf_token('close' ~ item.id) }}">
+                <button type="submit" class="btn btn-danger me-2">🔨 Clôturer l'enchère</button>
+            </form>
         {% endif %}
 
         {# Boutons CRUD #}
         {% if item.status != 'closed'%}
             <a href="{{ path('app_admin_item_form', {id: item.id}) }}" class="btn btn-warning me-2">✏️ Modifier</a>
         {% endif %}
-            <a href="{{ path('app_admin_item_delete', {id: item.id}) }}" class="btn btn-danger" onclick="return confirm('Supprimer cet objet ?')">🗑️ Supprimer</a>
-    </div>
+            <form method="post" action="{{ path('app_admin_item_delete', {id: item.id}) }}" class="d-inline" onsubmit="return confirm('Supprimer cet objet ?')">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ item.id) }}">
+                <button type="submit" class="btn btn-danger">🗑️ Supprimer</button>
+            </form>
+        </div>
 </div>
 
 {# Liste des enchérisseurs #}

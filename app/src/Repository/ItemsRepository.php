@@ -83,4 +83,17 @@ class ItemsRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+    public function findWonByUser($user): array
+{
+    return $this->createQueryBuilder('i')
+        ->select('i.id', 'i.title', 'i.finalPrice')
+        ->where('i.winner = :user')
+        ->andWhere('i.status = :status')
+        ->setParameter('user', $user)
+        ->setParameter('status', 'closed')
+        ->getQuery()
+        ->getArrayResult();
+}
+
 }

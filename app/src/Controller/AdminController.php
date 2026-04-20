@@ -67,9 +67,14 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('app_admin_item_show', ['id' => $id]);
     }
 
-    #[Route('/admin/item/{id}/close', name: 'app_admin_close')]
-    public function close(int $id, ItemsRepository $itemsRepository, OfferRepository $offerRepository, EntityManagerInterface $em): Response
+    #[Route('/admin/item/{id}/close', name: 'app_admin_close', methods: ['POST'])]
+    public function close(int $id, Request $request, ItemsRepository $itemsRepository, OfferRepository $offerRepository, EntityManagerInterface $em): Response
     {
+        if (!$this->isCsrfTokenValid('close' . $id, $request->request->get('_token'))) {
+            $this->addFlash('error', 'Token CSRF invalide.');
+            return $this->redirectToRoute('app_admin_item_show', ['id' => $id]);
+        }
+
         $item = $itemsRepository->find($id);
 
         if (!$item || $item->getStatus() !== 'published') {
@@ -124,13 +129,18 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/item/{id}/delete', name: 'app_admin_item_delete')]
-    public function delete(int $id, ItemsRepository $itemsRepository): Response
+    #[Route('/admin/item/{id}/delete', name: 'app_admin_item_delete', methods: ['POST'])]
+    public function delete(int $id,Request $request, ItemsRepository $itemsRepository): Response
     {
         $item = $itemsRepository->find($id);
 
         if (!$item) {
             throw $this->createNotFoundException('Objet introuvable');
+        }
+
+        if (!$this->isCsrfTokenValid('delete' . $id, $request->request->get('_token'))) {
+            $this->addFlash('error', 'Token CSRF invalide.');
+            return $this->redirectToRoute('app_admin');
         }
 
         $itemsRepository->remove($item);

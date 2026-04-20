@@ -23,13 +23,13 @@
                 </li>
 
                 {% if app.user %}
-                {% if is_granted('ROLE_ADMIN') %}
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <li class="nav-item">
+                            <a class="nav-link text-warning" href="{{ path('app_admin') }}">⚙️ Admin</a>
+                        </li>
+                    {% endif %}
                     <li class="nav-item">
-                        <a class="nav-link text-warning" href="{{ path('app_admin') }}">⚙️ Admin</a>
-                    </li>
-                {% endif %}
-                    <li class="nav-item">
-                        <span class="nav-link text-light">👤 {{ app.user.email }}</span>
+                        <a class="nav-link text-light" href="{{ path('app_profile') }}">👤 {{ app.user.email }}</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
@@ -52,7 +52,7 @@
 </nav>
 
 <main class="container my-4">
-        {% for message in app.flashes('success') %}
+    {% for message in app.flashes('success') %}
         <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
             {{ message }}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>

@@ -49,4 +49,15 @@ class OfferRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
     }
+
+    public function findByUser($user): array
+{
+    return $this->createQueryBuilder('o')
+        ->select('o.id', 'o.amount', 'i.id as itemId', 'i.title', 'i.status')
+        ->join('o.item', 'i')
+        ->where('o.user = :user')
+        ->setParameter('user', $user)
+        ->getQuery()
+        ->getArrayResult();
+}
 }
