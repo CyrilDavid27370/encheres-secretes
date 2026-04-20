@@ -51,7 +51,7 @@ class OfferRepository extends ServiceEntityRepository
     }
 
     public function findByUser($user): array
-{
+    {
     return $this->createQueryBuilder('o')
         ->select('o.id', 'o.amount', 'i.id as itemId', 'i.title', 'i.status')
         ->join('o.item', 'i')
@@ -59,5 +59,23 @@ class OfferRepository extends ServiceEntityRepository
         ->setParameter('user', $user)
         ->getQuery()
         ->getArrayResult();
-}
+    }
+
+    public function countTotal(): int
+    {
+
+    return (int) $this->createQueryBuilder('o')
+        ->select('COUNT(o.id)')
+        ->getQuery()
+        ->getSingleScalarResult();
+    }
+
+    public function sumTotal(): string
+    {
+
+    return (string) $this->createQueryBuilder('o')
+        ->select('SUM(o.amount)')
+        ->getQuery()
+        ->getSingleScalarResult();
+    }
 }

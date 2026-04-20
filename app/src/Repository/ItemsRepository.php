@@ -85,7 +85,8 @@ class ItemsRepository extends ServiceEntityRepository
     }
 
     public function findWonByUser($user): array
-{
+    {
+
     return $this->createQueryBuilder('i')
         ->select('i.id', 'i.title', 'i.finalPrice')
         ->where('i.winner = :user')
@@ -94,6 +95,17 @@ class ItemsRepository extends ServiceEntityRepository
         ->setParameter('status', 'closed')
         ->getQuery()
         ->getArrayResult();
-}
+    }
+
+    public function countByStatus(string $status): int
+    {
+        
+    return (int) $this->createQueryBuilder('i')
+        ->select('COUNT(i.id)')
+        ->where('i.status = :status')
+        ->setParameter('status', $status)
+        ->getQuery()
+        ->getSingleScalarResult();
+    }
 
 }

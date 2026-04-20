@@ -147,4 +147,17 @@ class AdminController extends AbstractController
         $this->addFlash('success', 'Objet supprimé avec succès !');
         return $this->redirectToRoute('app_admin');
     }
+
+    #[Route('/admin/dashboard', name: 'app_admin_dashboard')]
+    public function dashboard(ItemsRepository $itemsRepository, OfferRepository $offerRepository): Response
+    {
+
+    return $this->render('admin/dashboard.html.twig', [
+        'totalPublished' => $itemsRepository->countByStatus('published'),
+        'totalClosed' => $itemsRepository->countByStatus('closed'),
+        'totalUnpublished' => $itemsRepository->countByStatus('unpublished'),
+        'totalOffers' => $offerRepository->countTotal(),
+        'totalAmount' => $offerRepository->sumTotal(),
+    ]);
+    }
 }

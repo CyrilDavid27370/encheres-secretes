@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau de bord{% endblock %}
+
+{% block body %}
+<h1 class="mb-4 text-center">📊 Tableau de bord</h1>
+
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card text-center border-success">
+            <div class="card-body">
+                <h2 class="text-success">{{ totalPublished }}</h2>
+                <p class="mb-0">🟢 Objets en cours</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center border-secondary">
+            <div class="card-body">
+                <h2 class="text-secondary">{{ totalClosed }}</h2>
+                <p class="mb-0">🔒 Objets clôturés</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center border-warning">
+            <div class="card-body">
+                <h2 class="text-warning">{{ totalUnpublished }}</h2>
+                <p class="mb-0">🟡 Objets non publiés</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card text-center border-info">
+            <div class="card-body">
+                <h2 class="text-info">{{ totalOffers }}</h2>
+                <p class="mb-0">🔨 Total enchères placées</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card text-center border-primary">
+            <div class="card-body">
+                <h2 class="text-primary">{{ totalAmount ? totalAmount|number_format(2, ',', ' ') : '0,00' }} €</h2>
+                <p class="mb-0">💰 Montant total des enchères</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4 text-center">
+    <a href="{{ path('app_admin') }}" class="btn btn-outline-light">← Retour à la liste</a>
+</div>
+{% endblock %}
