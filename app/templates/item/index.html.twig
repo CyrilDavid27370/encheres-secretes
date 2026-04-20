@@ -21,29 +21,34 @@
 
 {# Liste des objets #}
 <div class="row row-cols-1 row-cols-md-3 g-4">
-    {% for item in items %}
-        <div class="col">
-            <div class="card h-100">
-                <div class="card-body">
-                    <h5 class="card-title">{{ item.title }}</h5>
-                    <p class="card-text text-muted">{{ item.description|slice(0, 80) }}...</p>
-                    <p class="card-text">
-                        <strong>Prix de départ :</strong> {{ item.startingPrice }} €
-                    </p>
-                    <span class="badge {{ item.status == 'published' ? 'bg-success' : 'bg-secondary' }}">
-                        {{ item.status == 'published' ? 'En cours' : 'Clôturé' }}
-                    </span>
-                </div>
-                <div class="card-footer">
-                    <a href="{{ path('app_item_show', {id: item.id}) }}" class="btn btn-primary btn-sm">
-                        Voir le détail
-                    </a>
-                </div>
+    {% for row in items %}
+    {% set item = row[0] %}
+    {% set offerCount = row['offerCount'] %}
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ item.title }}</h5>
+                <p class="card-text text-muted">{{ item.description|slice(0, 80) }}...</p>
+                <p class="card-text">
+                    <strong>Prix de départ :</strong> {{ item.startingPrice }} €
+                </p>
+                <span class="badge {{ item.status == 'published' ? 'bg-success' : 'bg-secondary' }}">
+                    {{ item.status == 'published' ? 'En cours' : 'Clôturé' }}
+                </span>
+                {% if item.status == 'published' %}
+                    <small class="text-muted ms-2">🔨 {{ offerCount }} enchère(s)</small>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                <a href="{{ path('app_item_show', {id: item.id}) }}" class="btn btn-primary btn-sm">
+                    Voir le détail
+                </a>
             </div>
         </div>
-    {% else %}
-        <p class="text-muted">Aucun objet disponible.</p>
-    {% endfor %}
+    </div>
+{% else %}
+    <p class="text-muted">Aucun objet disponible.</p>
+{% endfor %}
 </div>
 
 {% endblock %}

@@ -19,8 +19,11 @@ class ItemsRepository extends ServiceEntityRepository
     public function findPublished(): array
     {
         return $this->createQueryBuilder('i')
+            ->leftJoin('i.offers', 'o')
+            ->addSelect('COUNT(o.id) AS offerCount')
             ->where('i.status IN (:statuses)')
             ->setParameter('statuses', ['published', 'closed'])
+            ->groupBy('i.id')
             ->getQuery()
             ->getResult();
     }
@@ -28,11 +31,14 @@ class ItemsRepository extends ServiceEntityRepository
     public function findByCategory(int $categoryId): array
     {
         return $this->createQueryBuilder('i')
+            ->leftJoin('i.offers', 'o')
+            ->addSelect('COUNT(o.id) AS offerCount')
             ->join('i.categories', 'c')
             ->where('c.id = :categoryId')
             ->andWhere('i.status IN (:statuses)')
             ->setParameter('categoryId', $categoryId)
             ->setParameter('statuses', ['published', 'closed'])
+            ->groupBy('i.id')
             ->getQuery()
             ->getResult();
     }
@@ -50,11 +56,14 @@ class ItemsRepository extends ServiceEntityRepository
     public function findBySearch(string $search) : array
     {
         return $this->createQueryBuilder('i')
+            ->leftJoin('i.offers', 'o')
+            ->addSelect('COUNT(o.id) AS offerCount')
             ->where('i.title LIKE :search')
             ->orWhere('i.description LIKE :search')
             ->andWhere('i.status IN (:statuses)')
             ->setParameter('search', '%' . $search . '%')
             ->setParameter('statuses', ['published', 'closed'])
+            ->groupBy('i.id')
             ->getQuery()
             ->getResult();
     }
