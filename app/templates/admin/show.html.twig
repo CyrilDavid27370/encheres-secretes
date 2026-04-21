@@ -52,14 +52,14 @@
         </div>
 </div>
 
-{# Liste des enchérisseurs #}
-{% if offers|length > 0 %}
-<div class="card">
-    <div class="card-header">
-        <h5 class="mb-0">📋 Liste des enchères</h5>
-    </div>
-    <div class="card-body">
-        <table class="table table-dark table-hover">
+        {# Liste des enchérisseurs #}
+        {% if offers|length > 0 %}
+            <div class="card">
+                <div class="card-header">
+                <h5 class="mb-0">📋 Liste des enchères</h5>
+            </div>
+            <div class="card-body">
+            <table class="table table-dark table-hover">
             <thead>
                 <tr>
                     <th>Utilisateur</th>
@@ -74,8 +74,8 @@
                     </tr>
                 {% endfor %}
             </tbody>
-        </table>
-    </div>
+            </table>
+        </div>
 </div>
 {% else %}
     <p class="text-muted">Aucune enchère pour cet objet.</p>
